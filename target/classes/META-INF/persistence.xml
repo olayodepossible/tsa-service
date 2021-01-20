@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+  <persistence-unit name="redboxNibssTSARevenueCollectionUnit" transaction-type="RESOURCE_LOCAL">
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <mapping-file>hibernate-mappings/nibss.tsa.rest.hbm.xml</mapping-file>
+    <class>com.stanbic.redbox.nibss.tsa.revenue.collection.rest.orm.NibssTSARevenueCollectionLog</class>
+<!--     <class>com.stanbic.redbox.nibss.tsa.revenue.collection.rest.orm.NibssTSARevenueCollectionCredentials</class> -->   
+	<class> com.stanbic.redbox.nibss.tsa.revenue.collection.rest.orm.TSARevenueCollectionDetails</class>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    <properties>
+      <property name="hibernate.hbm2ddl.auto" value="update"/>
+      <!-- SQL dialect -->
+      <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>
+      <!-- Disable the second-level cache -->
+      <property name="cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
+      <!-- Echo all executed SQL to stdout -->
+      <property name="show_sql" value="true"/>
+      <!-- manimum size -->
+      <property name="hibernate.c3p0.min_size" value="10"/>
+      <!-- maximum size -->
+      <property name="hibernate.c3p0.max_size" value="500"/>
+      <property name="hibernate.c3p0.max_statements" value="1000"/>
+      <!-- log hibernate usage statistics -->
+      <property name="hibernate.generate_statistics" value="true"/>
+      <!-- id generation using a sequence -->
+      <property name="hibernate.jdbc.use_get_generated_keys" value="true"/>
+    </properties>
+  </persistence-unit>
+</persistence>

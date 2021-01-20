@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:camel="http://camel.apache.org/schema/spring"
+	xmlns:osgi="http://www.springframework.org/schema/osgi"
+	xmlns:ctx="http://www.springframework.org/schema/context"
+	xmlns:osgix="http://www.springframework.org/schema/osgi-compendium"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:cxf="http://camel.apache.org/schema/cxf"
+	xmlns:httpj="http://cxf.apache.org/transports/http-jetty/configuration"
+	xmlns:sec="http://cxf.apache.org/configuration/security"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd
+       http://www.springframework.org/schema/osgi-compendium http://www.springframework.org/schema/osgi-compendium/spring-osgi-compendium.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd
+       http://cxf.apache.org/transports/http-jetty/configuration http://cxf.apache.org/schemas/configuration/http-jetty.xsd
+       http://cxf.apache.org/configuration/security http://cxf.apache.org/schemas/configuration/security.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd"
+	xmlns:aop="http://www.springframework.org/schema/aop">
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<osgix:cm-properties id="redbox.properties"
+		persistent-id="com.stanbic.redbox.service" />
+	<ctx:property-placeholder
+		ignore-unresolvable="true" properties-ref="redbox.properties" />
+
+	<osgix:cm-properties
+		id="tsa-revenue-collection.properties"
+		persistent-id="com.stanbic.redbox.service.nibss.tsa.revenue.collection" />
+	<ctx:property-placeholder
+		ignore-unresolvable="true"
+		properties-ref="tsa-revenue-collection.properties" />
+
+	<bean id="properties"
+		class="org.apache.camel.component.properties.PropertiesComponent">
+		<property name="location"
+			value="file:${redbox.config.location}/com.stanbic.redbox.service.nibss.tsa.revenue.collection.cfg" />
+	</bean>
+	<tx:annotation-driven />
+
+
+	<context:component-scan
+		base-package="com.stanbic.redbox.nibss.tsa.revenue.collection.rest" />
+
+	<context:annotation-config />
+
+	<bean id="tsaRevenueCollectionExceptionHandler"
+		class="com.stanbic.redbox.nibss.tsa.revenue.collection.rest.exception.RedBoxTSARevenueCollectionExceptionHandler" />
+
+	<!-- <osgi:reference id="nibssTSARevenueCollectionSecurityPolicyApi" interface="com.stanbic.redbox.nibss.tsa.revenue.collection.rest.api.NibssTSARevenueCollectionSecurityPolicyApi" 
+		/> -->
+
+	<bean id="nibssTSARevenueCollectionLoggerApi"
+		class="com.stanbic.redbox.nibss.tsa.revenue.collection.rest.api.impl.NibssTSARevenueCollectionLoggerApiImpl" />
+
+
+	<osgi:service ref="nibssTSARevenueCollectionLoggerApi"
+		interface="com.stanbic.redbox.nibss.tsa.revenue.collection.rest.api.NibssTSARevenueCollectionLoggerApi" />
+
+	<!-- <bean id="nibssTSARevenueCollectionSecurityPolicyApi" class="com.stanbic.redbox.nibss.tsa.revenue.collection.rest.api.impl.NibssTSARevenueCollectionSecurityPolicyApiImpl" 
+		/> <osgi:service ref="nibssTSARevenueCollectionLoggerApi" interface="com.stanbic.redbox.nibss.tsa.revenue.collection.rest.api.NibssTSARevenueCollectionSecurityPolicyApi" 
+		/> -->
+
+
+	<bean id="nibssTSARevenueCollectionCallerApiImpl"
+		class="com.stanbic.redbox.nibss.tsa.revenue.collection.rest.api.impl.NibssTSARevenueCollectionCallerApiImpl">
+		<property name="url" value="${tsa.revenue.collection.url}" />
+		<property name="pingOperation" value="${operation.ping}" />
+		<property name="loginOperation" value="${operation.login}" />
+		<property name="notificationOperation"
+			value="${operation.notification}" />
+		<property name="resetOperation" value="${operation.reset}" />
+		<property name="encryptOperation"
+			value="${operation.encrypt}" />
+		<property name="clientCode"
+			value="${tsa.revenue.collection.client.code}" />
+		<property name="username"
+			value="${tsa.revenue.collection.username}" />
+		<property name="encoding"
+			value="${tsa.revenue.collection.encoding}" />
+		<property name="contentType"
+			value="${tsa.revenue.collection.contentType}" />
+		<property name="notificationContentType"
+			value="${tsa.revenue.collection.notification.contentType}" />
+		<property name="proxyHost"
+			value="${tsa.revenue.collection.proxy.host}" />
+		<property name="proxyPort"
+			value="${tsa.revenue.collection.proxy.port}" />
+		<property name="isOverProxy"
+			value="${tsa.revenue.collection.isOverProxy}" />
+	</bean>
+	<osgi:service
+		interface="com.stanbic.redbox.nibss.tsa.revenue.collection.rest.api.NibssTSARevenueCollectionCallerApi"
+		ref="nibssTSARevenueCollectionCallerApiImpl" />
+	<bean id="nibssTSARevenueCollectionProcessor"
+		class="com.stanbic.redbox.nibss.tsa.revenue.collection.rest.processor.NibssTSARevenueCollectionProcessor">
+		<property name="bankId"
+			value="${tsa.revenue.collection_bank_id}" />
+		<property name="batchIdCode"
+			value="${tsa.revenue.collection_batch_id_code}" />
+		<property name="uniqueReferenceCode"
+			value="${tsa.revenue.collection_unique_reference_code}" />
+		<property name="bankBranchid"
+			value="${tsa.revenue.collection_bank_branch_id}" />
+		<property name="cbnAcct"
+			value="${tsa.revenue.collection_cbn_acct}" />
+		<property name="channel"
+			value="${tsa.revenue.collection_channel}" />
+		<property name="customerTin"
+			value="${tsa.revenue.collection_customer_tin}" />
+		<property name="feedType"
+			value="${tsa.revenue.collection_feed_type}" />
+		<property name="itemCode"
+			value="${tsa.revenue.collection_item_code}" />
+		<property name="itemName"
+			value="${tsa.revenue.collection_item_name}" />
+		<property name="locationCode"
+			value="${tsa.revenue.collection_location_code}" />
+		<property name="locationName"
+			value="${tsa.revenue.collection_location_name}" />
+		<property name="fee" value="${tsa.revenue.collection_fee}" />
+		<property name="psspCode"
+			value="${tsa.revenue.collection_pssp_code}" />
+		<property name="psspName"
+			value="${tsa.revenue.collection_pssp_name}" />
+		<property name="requestedAmount"
+			value="${tsa.revenue.collection_requested_amount}" />
+	</bean>
+
+	<bean id="nibssTSARevenueCollectionLogDAO"
+		class="com.stanbic.redbox.nibss.tsa.revenue.collection.rest.dao.NibssTSARevenueCollectionLogDAO" />
+
+	<bean id="callerClient"
+		class="com.stanbic.redbox.nibss.tsa.revenue.collection.rest.http.client.CallerClient">
+		<property name="shouldAppBypassCertificate"
+			value="${tsa.revenue.collection.shouldAppBypassCertificate}" />
+		<property name="storePwd" value="${keystore.password}" />
+		<property name="storePathway" value="${keystore.file}" />
+		<property name="username"
+			value="${tsa.revenue.collection.username}" />
+	</bean>
+
+	<osgi:reference id="redboxServicesApi"
+		interface="com.stanbic.redbox.util.api.RedBoxServicesApi" />
+
+	<osgi:reference id="redboxSecurityApi"
+		interface="com.stanbic.redbox.util.api.RedBoxSecurityApi" />
+
+	<osgi:reference id="redboxLifeTimeIDGeneratorApi"
+		interface="com.stanbic.redbox.util.api.RedBoxLifeTimeIDGeneratorApi" />
+
+	<osgi:reference id="redboxCountryDetailsApi"
+		interface="com.stanbic.redbox.util.api.RedBoxCountryDetailsApi" />
+
+	<osgi:reference id="encryptDecryptApi"
+		interface="com.stanbic.redbox.util.api.EncryptDecryptApi" />
+
+	<bean id="nibssTSARevenueCollectionDataSource"
+		class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName"
+			value="${redbox.dbase.jdbc.driver}" />
+		<property name="url" value="${redbox.dbase.jdbc.url}" />
+		<property name="username" value="${redbox.dbase.username}" />
+		<property name="password" value="${redbox.dbase.password}" />
+		<property name="poolPreparedStatements"
+			value="${redbox.dbase.poolPreparedStatements}" />
+		<property name="testOnBorrow"
+			value="${tsa.revenue.collection.hibernate.test_on_borrow}" />
+		<property name="validationQuery" value="select 1 from dual" />
+		<property name="testWhileIdle"
+			value="${tsa.revenue.collection.hibernate.test_while_idle}" />
+		<property name="timeBetweenEvictionRunsMillis"
+			value="${tsa.revenue.collection.hibernate.time_btw_eviction_runs_in_millis}" />
+	</bean>
+
+	<bean id="nibssTSARevenueCollectionEMF"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource"
+			ref="nibssTSARevenueCollectionDataSource" />
+		<property name="persistenceUnitName"
+			value="redboxNibssTSARevenueCollectionUnit" />
+	</bean>
+
+	<bean id="nibssTSARevenueCollectionEntityManagerWrapper"
+		class="org.springframework.orm.jpa.support.SharedEntityManagerBean">
+		<property name="entityManagerFactory"
+			ref="nibssTSARevenueCollectionEMF" />
+	</bean>
+
+	<bean id="nibssTSARevenueCollectionTransactionManager"
+		class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory"
+			ref="nibssTSARevenueCollectionEMF" />
+	</bean>
+
+	<cxf:rsServer id="tsaRevenueCollectionRestServer"
+		address="${tsa.revenue.collection.service.host.rest.service.url}"
+		serviceClass="com.stanbic.redbox.nibss.tsa.revenue.collection.rest.service.NibssTSARevenueCollectionService"
+		loggingFeatureEnabled="true" loggingSizeLimit="20"> <!-- depends-on="port-tls-config" -->
+
+	</cxf:rsServer>
+
+	<camelContext
+		xmlns="http://camel.apache.org/schema/spring"
+		trace="${tsa.revenue.collection.upload.trace}"
+		id="nibssTSARevenueCollectionRestCamelContext">
+
+		<route id="inboundNibssTSARevenueCollectionNotifRestRoute">
+			<from uri="cxfrs://bean://tsaRevenueCollectionRestServer" />
+			<setProperty propertyName="APP_NAME">
+				<constant>{{tsa.revenue.collection.application.name}}</constant>
+			</setProperty>
+			<recipientList>
+				<simple>direct-vm:${header.operationName}Route</simple>
+			</recipientList>
+		</route>
+
+		<route
+			id="inboundNibssTSARevenueCollectionNotificationRestRoute">
+			<from uri="direct-vm:tsaCollectionNotificationRoute" />
+			<doTry>
+				<!-- <bean ref="redboxSecurityApi" method="verifySource" /> <bean ref="redboxSecurityApi"method="authenticateBasicAuthorization" 
+					/> -->
+				<!-- <policy ref="nibssTSARevenueCollectionSecurityPolicyApi"> -->
+				<log
+					message="Processing tsa Collection Notification request... " />
+				<bean ref="nibssTSARevenueCollectionProcessor"
+					method="addInitialProperties" />
+				<choice>
+					<when>
+						<simple>${property.IS_ERROR} == 'true'</simple>
+						<filter>
+							<simple>${property.RESPONSE_CODE} == null</simple>
+							<setProperty propertyName="RESPONSE_CODE">
+								<constant>A91</constant>
+							</setProperty>
+							<setProperty propertyName="RESPONSE_DESCRIPTION">
+								<constant>Error occured while retrieving request object from payload</constant>
+							</setProperty>
+						</filter>
+					</when>
+					<otherwise>
+						<!-- <bean ref="nibssTSARevenueCollectionCallerApiImpl"	method="ping" /> -->
+						<choice>
+							<when>
+								<simple>${property.RESPONSE_CODE} == '00'</simple>
+								<!-- <bean ref="nibssTSARevenueCollectionCallerApiImpl" method="login" 
+									/> -->
+
+								<filter>
+									<simple>${property.REFRESH_TOKEN} == 'true' and ${property.NO_JWT_IN_DB} == 'true'</simple>
+									<to uri="direct:refreshAuth" />
+									<setProperty propertyName="REFRESH_TOKEN">
+										<constant>false</constant>
+									</setProperty>
+								</filter>
+								<filter>
+									<simple>${property.REFRESH_TOKEN} == 'true' and ${property.NO_JWT_IN_DB} == 'false'</simple>
+									<to uri="direct:loginToGenerateJWT" />
+									<setProperty propertyName="REFRESH_TOKEN">
+										<constant>false</constant>
+									</setProperty>
+								</filter>
+
+
+								<bean ref="nibssTSARevenueCollectionCallerApiImpl"
+									method="notification" />
+
+								<!-- <to uri="direct:encryptRequestRoute" /> <filter> <simple>${property.RESPONSE_CODE} 
+									== '00'</simple> <bean ref="nibssTSARevenueCollectionCallerApiImpl" method="notification" 
+									/> </filter> -->
+
+							</when>
+							<when>
+								<simple>${property.RESPONSE_CODE} == '97'</simple>
+								<log
+									message="Timeout occured while trying to ping NIBSS TSA Collection Notification service" />
+							</when>
+							<otherwise>
+								<setProperty propertyName="RESPONSE_CODE">
+									<constant>A98</constant>
+								</setProperty>
+								<setProperty propertyName="RESPONSE_DESCRIPTION">
+									<constant>NIBSS TSA Collection Notification Service is not available</constant>
+								</setProperty>
+							</otherwise>
+						</choice>
+					</otherwise>
+				</choice>
+				<!-- </policy> -->
+				<log
+					message="Tsa Collection Notification Successfully Completed " />
+				<doCatch>
+					<exception>java.lang.Exception</exception>
+					<log message="Tsa Collection Notification Failed To Complete " />
+					<bean ref="tsaRevenueCollectionExceptionHandler"
+						method="handleTSARevenueCollectionExceptionRequestException" />
+				</doCatch>
+				<doFinally>
+					<!-- <filter>
+						<simple>${property.RESPONSE_CODE} == 'A90'</simple>
+						<setProperty propertyName="REFRESH_TOKEN">
+							<constant>true</constant>
+						</setProperty>
+						<to uri="direct-vm:tsaCollectionNotificationRoute" />
+					</filter> -->
+					<bean ref="nibssTSARevenueCollectionProcessor"
+						method="processFinalResponse" />
+					<bean ref="nibssTSARevenueCollectionProcessor"
+						method="processLogPayload" />
+					<bean ref="nibssTSARevenueCollectionLoggerApi"
+						method="logNibssTSARevenueCollectionFromExchangeProperty" />
+				</doFinally>
+			</doTry>
+		</route>
+
+		<route id="refreshAuthorization">
+			<from uri="direct:refreshAuth" />
+			<bean ref="nibssTSARevenueCollectionCallerApiImpl"
+				method="reset" />
+			<bean ref="nibssTSARevenueCollectionProcessor"
+				method="processLogCredentials" />
+			<to uri="direct:loginToGenerateJWT" />
+		</route>
+
+		<route id="generateJWTRoute">
+			<from uri="direct:loginToGenerateJWT" />
+			<bean ref="nibssTSARevenueCollectionCallerApiImpl"
+				method="login" />
+			<bean ref="nibssTSARevenueCollectionProcessor"
+				method="processLogCredentials" />
+		</route>
+
+		<route id="encryptRequest">
+			<from uri="direct:encryptRequestRoute" />
+			<bean ref="nibssTSARevenueCollectionCallerApiImpl"
+				method="encrypt" />
+		</route>
+
+	</camelContext>
+
+</beans>

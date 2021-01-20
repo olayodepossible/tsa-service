@@ -1,0 +1,104 @@
+steps 
+4. engage testing
+3. make modifications	
+1. create a repository 					- done 
+2. look at the code 					- done
+3. do the tests 			
+5. fill the report 
+6. avoid meetings and calls excepts Okey, Wole, Dipo Aina, David, Omoniyi
+
+
+
+D:\stanbic-work\applications\fuseIDE\redbox-staging\git-repo\tsa\RbxV1TsaNotify
+
+integration steps
+=====================
+Integration Steps
+1. Ping
+2. Reset Credentials
+3. Login
+4. Notification
+5. MDA List
+6. MDA Info
+7. MDA Collection Info
+8. Bank Info
+
+Integration Steps
+1. Ping
+2. Reset Credentials
+3. Login
+4. Notification
+5. MDA List
+6. MDA Info
+7. MDA Collection Info
+8. Bank Info
+
+test cases
+==========
+TEST CASES
+PING
+
+Valid username - RESET
+
+Invalid username - RESET
+
+Valid credentials - LOGIN
+
+Invalid credentials - LOGIN
+
+Valid Request - BANK INFO
+
+Invalid Request – BANK INFO
+Valid Request – MDA LIST
+
+Invalid Request – MDA LIST
+Valid Request – MDA INFO
+
+Invalid Request – MDA INFO
+Valid Request – MDA COLLECTION INFO
+
+Invalid Request – MDA COLLECTION INFO
+
+NOTIFICATION TESTS
+(Send notification call using the different criteria below and capture the request and response in the appropriate field).
+
+	Invalid Batch ID Length (More than 20 character length)
+	Invalid Batch ID Value (Valid PSSPCode + Invalid Bank Code + Random Number[14])
+	Valid Batch ID (Valid PSSPCode+BankCode+Random Number[14])
+	Invalid Unique Reference Length (More than 20 character length)
+	Invalid Unique Reference Value (Valid PSSPCode + Invalid Channel Code + Bank Code + Random Number[12])
+	Valid Unique Reference (Valid PSSPCode + Valid Channel Code + BankCode+Random Number[12])
+	Confirm that a successful Unique Reference can no longer be used
+	Invalid Bank Code e.g BankID:071
+	Empty tsaPcCoderef (Can’t be left empty)
+	Invalid tsaPcCodeRef and tsaPcCodeName
+	Invalid gifmisCode
+	Valid Channel Code
+	Invalid Channel Code
+	Invalid payColDate Format e.g 20200515012058
+	Valid payColDate Format e.g 2020-05-15-01-20-58
+	Valid PSSP
+	Invalid PSSP Code
+	Invalid Narration (more than 100 characters)
+	Valid Narration (within 100 characters)
+	Valid FeedType (C or R)
+	Valid Session ID (0 or 1)
+	Invalid Fee format (Pass an exponent value or zero value)
+
+Conditions: 
+Value can’t be 0
+Value can’t be empty
+Value can’t be in exponent
+	Invalid Remitted Amount (Pass an exponent value or zero value)
+Conditions: 
+Value can’t be 0
+Value can’t be empty
+Value can’t be in exponent
+	Confirm that request with Invalid Authorization returns HTTP Status 804
+	Invalid Settlement Ref (pass an empty Value)
+	Invalid Value Date (test data: 15/05/2020)
+	Confirm that CollectedAmount must be in 2 decimal places
+	Confirm that CBN Account can’t be left empty
+	Confirm that Currency Code can only accept characters eg. NGN. 
+Make a test passing 123
+After the above testcases has been confirmed okay by an Agent in NIBSS. A comment will be passed at the right hand of the row to confirm that all valid Unique reference successfully submitted was processed by CBN.

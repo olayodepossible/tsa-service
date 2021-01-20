@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping
+	package="com.stanbic.redbox.nibss.tsa.revenue.collection.rest.orm">
+
+
+	<class name="NibssTSARevenueCollectionCredentials"
+		table="RBX_S_TSA_COLLECTN_CREDENTIAL">
+		<id name="id" column="id" type="integer" />
+		<property column="STATUS" name="status" />
+		<property column="USER_TOKEN" name="userToken" />
+		<property column="TOKEN_REFRESH_DATE" name="tokenRefreshDate"	type="long" />
+		<property column="USER_PASSWORD" name="userPassword" />
+		<property column="AUTHORIZATION" name="authorization"	type="materialized_clob" />
+	</class>
+
+
+<sql-query name="getNibssTSARevenueCollectionCredentialsById">
+	 <![CDATA[
+	 SELECT * from RBX_S_TSA_COLLECTN_CREDENTIAL b where b.ID = :id   		  
+		  ]]>
+		<return class="NibssTSARevenueCollectionCredentials" />
+	</sql-query>
+</hibernate-mapping>

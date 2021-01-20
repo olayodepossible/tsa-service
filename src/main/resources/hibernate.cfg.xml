@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <!-- JDBC connection pool (use the built-in) -->
+    <property name="connection.pool_size">1000</property>
+    <!-- SQL dialect -->
+    <property name="dialect">org.hibernate.dialect.Oracle10gDialect</property>
+    <!-- Enable Hibernate's automatic session context management -->
+    <property name="current_session_context_class">thread</property>
+    <!-- Disable the second-level cache -->
+    <property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+    <!-- Echo all executed SQL to stdout -->
+    <property name="show_sql">true</property>
+    <!-- Drop and re-create the database schema on startup -->
+    <property name="hbm2ddl.auto">update</property>
+    <!-- manimum size -->
+    <property name="hibernate.c3p0.min_size">10</property>
+    <!-- maximum size -->
+    <property name="hibernate.c3p0.max_size">500</property>
+    <!-- timeout before connections are closed property name="hibernate.c3p0.timeout">1800</property 
+			maximum statements that can be made -->
+    <property name="hibernate.c3p0.max_statements">1000</property>
+    <!-- maximum statements that can be made -->
+    <property name="hibernate.c3p0.idleTestPeriod">50</property>
+    <!-- log hibernate usage statistics -->
+    <property name="hibernate.generate_statistics">true</property>
+    <!-- id generation using a sequence -->
+    <property name="hibernate.jdbc.use_get_generated_keys">true</property>
+  </session-factory>
+</hibernate-configuration>

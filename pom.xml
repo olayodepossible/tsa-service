@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.stanbic.redbox</groupId>
+	<artifactId>nibss-tsa-notification-rest-service</artifactId>
+	<packaging>bundle</packaging>
+	<version>1.0.0</version>
+
+	<name>Redbox CBN NIBSS Treasury Single Account TSA Notification Service</name>
+	<url>http://www.stanbicibtc.com</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<camel.version>2.10.0.redhat-60024</camel.version>
+		<java.version>1.8</java.version>
+		<maven.compiler.plugin.version>3.5.1</maven.compiler.plugin.version>
+		<maven.resources.plugin.version>2.6</maven.resources.plugin.version>
+		<maven.bundle.plugin.version>2.3.7</maven.bundle.plugin.version>
+		<jackson.core.version>2.5.4</jackson.core.version>
+		<jackson.databind.version>2.5.4</jackson.databind.version>
+		<jackson.annotations.version>2.5.0</jackson.annotations.version>
+		<redbox.util.version>1.0.1</redbox.util.version>
+		<encoding>UTF-8</encoding>
+		<hiberante.version>4.2.7.Final</hiberante.version>
+		<mapstruct.version>1.0.0.Final</mapstruct.version>
+		<oracle.version>10.2.0.2.0</oracle.version>
+		<spring-oxm.version>3.1.3.RELEASE</spring-oxm.version>
+		<log4j.version>1.2.17</log4j.version>
+		<slf4j.version>1.6.6</slf4j.version>
+		<bcprov.version>1.45</bcprov.version>
+		<bcpg.version>1.45</bcpg.version>
+		<pgp.version>1.0.0</pgp.version>
+
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-core</artifactId>
+			<version>${camel.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-spring</artifactId>
+			<version>${camel.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-cxf</artifactId>
+			<version>${camel.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson.core.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.databind.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${jackson.annotations.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.stanbic.redbox</groupId>
+			<artifactId>redbox-util</artifactId>
+			<version>${redbox.util.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct-jdk8</artifactId>
+			<version>${mapstruct.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct-processor</artifactId>
+			<version>${mapstruct.version}</version>
+		</dependency>
+
+		<!-- Database -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-osgi</artifactId>
+			<version>4.2.7.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>4.2.7.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>3.12.1.GA</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>oracle</artifactId>
+			<version>10.2.0.2.0</version>
+		</dependency>
+
+
+		<!-- <dependency> <groupId>com.stanbic.redbox</groupId> <artifactId>ssm-service</artifactId> 
+			<version>1.0.2</version> </dependency> -->
+		<!-- logging -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.6.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.6.6</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.16</version>
+		</dependency>
+
+		<!-- testing -->
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-test-spring</artifactId>
+			<version>2.10.0</version>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<defaultGoal>install</defaultGoal>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven.compiler.plugin.version}</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.mapstruct</groupId>
+							<artifactId>mapstruct-processor</artifactId>
+							<version>${mapstruct.version}</version>
+						</path>
+
+					</annotationProcessorPaths>
+					<compilerArgs>
+						<compilerArg> -Amapstruct.suppressGeneratorTimestamp=true
+						</compilerArg>
+						<compilerArg> -Amapstruct.suppressGeneratorVersionInfoComment=true
+						</compilerArg>
+					</compilerArgs>
+
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>${maven.resources.plugin.version}</version>
+				<configuration>
+					<encoding>${encoding}</encoding>
+				</configuration>
+			</plugin>
+			 
+			<!-- allows the route to be ran via 'mvn camel:run' -->
+			<plugin>
+				<groupId>org.apache.camel</groupId>
+				<artifactId>camel-maven-plugin</artifactId>
+				<version>2.10.0</version>
+			</plugin>
+			
+			
+			<plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>${maven.bundle.plugin.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>nibss-tsa-revenue-collection-rest-service</Bundle-SymbolicName>
+                        <Private-Package>com.stanbic.redbox.nibss.tsa.revenue.collection.rest.*</Private-Package>
+                        <Import-Package>
+                            org.apache.camel.model,
+                            org.mapstruct.factory.*,
+                            !com.stanbic.redbox.util,
+                           	org.apache.camel.osgi,
+							org.hibernate.transform,
+							org.springframework.beans.factory.annotation,
+							org.springframework.jdbc.core,
+							org.springframework.orm,
+							org.hibernate.ejb,
+							org.hibernate.ejb.connection,
+							javax.persistence,
+							javax.persistence.criteria,
+							org.hibernate.proxy,
+							org.hibernate,
+							javassist.util.proxy,
+							javax.sql,
+							javax.persistence.metamodel,
+							javax.persistence.spi,
+							org.springframework.aop,
+							org.springframework.aop.framework,
+							org.aopalliance.aop,
+							net.sf.cglib.proxy,
+							net.sf.cglib.core,
+							net.sf.cglib.reflect, 
+							oracle.jdbc.driver,
+                          	 org.springframework.oxm,
+                            org.springframework.oxm.jaxb,
+                            *
+                        </Import-Package>
+                        <Require-Bundle>org.apache.cxf.bundle</Require-Bundle>
+                    </instructions>
+                </configuration>
+            </plugin>
+		</plugins>
+	</build>
+
+</project>
